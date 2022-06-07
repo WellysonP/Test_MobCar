@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:mobicar/models/dummy.dart';
+import 'package:mobicar/utils/app_routes.dart';
 import 'package:provider/provider.dart';
-
 import '../Provider/cars.dart';
 import '../component/car_tile.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class ListCarPage extends StatelessWidget {
+  const ListCarPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +15,35 @@ class HomePage extends StatelessWidget {
         title: Image.asset("assets/images/Group 2.png"),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(AppRoutes.HOME_DETAIL);
+              },
               icon: Image.asset("assets/images/menu-fold.png")),
         ],
+      ),
+      bottomNavigationBar: Container(
+        height: 60,
+        child: BottomAppBar(
+          color: Theme.of(context).colorScheme.primary,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.copyright_outlined,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "2020. All rights reserved to Mobcar.",
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+            ],
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -49,7 +72,8 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 TextButton(
-                  style: TextButton.styleFrom(backgroundColor: Colors.black),
+                  style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary),
                   onPressed: () {},
                   child: Text(
                     "Add new",

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobicar/Provider/cars.dart';
-import 'package:mobicar/pages/home_page.dart';
+import 'package:mobicar/pages/home_detail_page.dart';
+import 'package:mobicar/pages/list_car_page.dart';
+import 'package:mobicar/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
 import 'component/car_tile.dart';
@@ -24,14 +26,16 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: theme.copyWith(
-            colorScheme: theme.colorScheme
-                .copyWith(primary: Colors.black, secondary: Colors.blueAccent)),
+            colorScheme: theme.colorScheme.copyWith(
+          primary: Colors.black,
+          secondary: Color.fromRGBO(0, 173, 238, 1),
+        )),
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        routes: {
+          AppRoutes.HOME: (context) => ListCarPage(),
+          AppRoutes.HOME_DETAIL: (context) => HomedetailPage(),
+        },
       ),
-      builder: (context, child) {
-        return child!;
-      },
     );
   }
 }
