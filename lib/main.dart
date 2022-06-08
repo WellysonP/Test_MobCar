@@ -26,10 +26,18 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: theme.copyWith(
-            colorScheme: theme.colorScheme.copyWith(
-          primary: Colors.black,
-          secondary: Color.fromRGBO(0, 173, 238, 1),
-        )),
+          colorScheme: theme.colorScheme.copyWith(
+            primary: Colors.black,
+            secondary: Color.fromRGBO(0, 173, 238, 1),
+          ),
+          dialogTheme: theme.dialogTheme.copyWith(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(24),
+              ),
+            ),
+          ),
+        ),
         debugShowCheckedModeBanner: false,
         routes: {
           AppRoutes.HOME: (context) => ListCarPage(),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobicar/pages/new_car_page.dart';
+import 'package:mobicar/component/new_car_dialog.dart';
 import 'package:mobicar/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 import '../Provider/cars.dart';
 import '../component/car_tile.dart';
+import '../component/new_car_dialog.dart';
 
 class ListCarPage extends StatelessWidget {
   const ListCarPage({Key? key}) : super(key: key);
@@ -81,7 +82,7 @@ class ListCarPage extends StatelessWidget {
                           primary: Colors.white),
                       child: Text("Add new"),
                       onPressed: () {
-                        newCarPage(context);
+                        newCarDialog(context);
                       },
                     ),
                   ],

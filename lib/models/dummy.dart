@@ -37,4 +37,67 @@ final dummy = [
     imageUrl:
         "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
   ),
+  Car(
+    id: "05",
+    brand: "Toyota",
+    vehicles: "Corolla",
+    year: 2022,
+    price: 150000,
+    imageUrl:
+        "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
+  ),
+  Car(
+    id: "06",
+    brand: "Toyota",
+    vehicles: "Corolla",
+    year: 2022,
+    price: 150000,
+    imageUrl:
+        "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
+  ),
+  Car(
+    id: "07",
+    brand: "Toyota",
+    vehicles: "Corolla",
+    year: 2022,
+    price: 150000,
+    imageUrl:
+        "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
+  ),
+  Car(
+    id: "08",
+    brand: "Toyota",
+    vehicles: "Corolla",
+    year: 2022,
+    price: 150000,
+    imageUrl:
+        "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
+  ),
+  Car(
+    id: "09",
+    brand: "Toyota",
+    vehicles: "Corolla",
+    year: 2022,
+    price: 150000,
+    imageUrl:
+        "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
+  ),
+  Car(
+    id: "10",
+    brand: "Toyota",
+    vehicles: "Corolla",
+    year: 2022,
+    price: 150000,
+    imageUrl:
+        "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
+  ),
+  Car(
+    id: "11",
+    brand: "Toyota",
+    vehicles: "Corolla",
+    year: 2022,
+    price: 150000,
+    imageUrl:
+        "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
+  ),
 ];
