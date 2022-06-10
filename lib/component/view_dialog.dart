@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/car_models.dart';
+import '../models/car_model.dart';
 
 Future<Object?> viewDialog(
     BuildContext context, TextStyle _textTheme, Car car) {
@@ -11,7 +11,7 @@ Future<Object?> viewDialog(
         contentPadding: EdgeInsets.symmetric(horizontal: 16),
         content: SizedBox(
           width: 342,
-          height: 325,
+          height: 335,
           child: Column(
             children: [
               Row(
@@ -54,7 +54,7 @@ Future<Object?> viewDialog(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 13),
-                      Row(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -68,7 +68,7 @@ Future<Object?> viewDialog(
                         ],
                       ),
                       SizedBox(height: 16),
-                      Row(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -87,7 +87,7 @@ Future<Object?> viewDialog(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 13),
-                      Row(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -104,7 +104,7 @@ Future<Object?> viewDialog(
                         ],
                       ),
                       SizedBox(height: 16),
-                      Row(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(

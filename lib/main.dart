@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobicar/Provider/cars.dart';
+import 'package:mobicar/component/new_car_dialog.dart';
+import 'package:mobicar/component/new_car_form.dart';
 import 'package:mobicar/pages/home_detail_page.dart';
 import 'package:mobicar/pages/list_car_page.dart';
 import 'package:mobicar/utils/app_routes.dart';
@@ -42,6 +44,7 @@ class MyApp extends StatelessWidget {
         routes: {
           AppRoutes.HOME: (context) => ListCarPage(),
           AppRoutes.HOME_DETAIL: (context) => HomedetailPage(),
+          AppRoutes.FORM: (context) => NewCarDialog(),
         },
       ),
     );

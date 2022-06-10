@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobicar/Provider/cars.dart';
 import 'package:mobicar/component/view_dialog.dart';
+import 'package:mobicar/utils/app_routes.dart';
 import 'package:provider/provider.dart';
-import '../models/car_models.dart';
+import '../models/car_model.dart';
 
 enum FilterOptions {
   view,
@@ -19,48 +20,56 @@ class CarTile extends StatelessWidget {
     final _textTheme = TextStyle(fontSize: 14);
     final cars = Provider.of<Cars>(context);
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
-          margin: EdgeInsets.only(left: 20.5), //mudar posição p/ relativa
-          width: 48,
-          height: 48,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              car.imageUrl,
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
-          ),
-        ),
-        SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Row(
           children: [
-            Text(
-              car.vehicles,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
+            Container(
+              margin: EdgeInsets.only(left: 20.5), //mudar posição p/ relativa
+              width: 48,
+              height: 48,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  car.imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
             ),
-            Text(
-              car.year.toString(),
-              style: TextStyle(
-                fontSize: 14,
-              ),
+            SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  car.vehicles,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  car.year.toString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    viewDialog(context, _textTheme, car);
+                  },
+                  child: Text(
+                    "View More",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 10,
+                    ),
+                  ),
+                )
+              ],
             ),
-            Text(
-              "View More",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            )
           ],
-        ),
-        SizedBox(
-          width: 215, // Modificar posição
         ),
         PopupMenuButton(
           icon: Icon(Icons.more_vert),
@@ -83,7 +92,10 @@ class CarTile extends StatelessWidget {
               cars.removeCar(car);
             }
             if (selectedValue == FilterOptions.edit) {
-              return;
+              Navigator.of(context).pushNamed(
+                AppRoutes.FORM,
+                arguments: cars,
+              );
             }
             if (selectedValue == FilterOptions.view) {
               viewDialog(context, _textTheme, car);
