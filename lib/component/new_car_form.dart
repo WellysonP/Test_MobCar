@@ -1,7 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mobicar/Provider/brand_provider.dart';
+import 'package:mobicar/models/brand_model.dart';
+import 'package:mobicar/models/vehicle_model.dart';
+import 'package:mobicar/services/brand_service.dart';
+import 'package:mobicar/services/vehicle_service.dart';
 import 'package:provider/provider.dart';
 
 import '../Provider/cars.dart';
+import '../Provider/vehicle_provider.dart';
 
 class NewCarForm extends StatefulWidget {
   const NewCarForm({Key? key}) : super(key: key);
@@ -11,6 +18,32 @@ class NewCarForm extends StatefulWidget {
 }
 
 class _NewCarFormState extends State<NewCarForm> {
+  late final Dio dio;
+  late final BrandService brandService;
+  late final VehicleService vehicleService;
+
+  late final BrandProvider brandProvider;
+  late final VehicleProvider vehicleProvider;
+
+  BrandModel? selectedBrand;
+  VehicleModel? selectedVehicle;
+
+  @override
+  void initState() {
+    dio = Dio(BaseOptions(
+        baseUrl: "https://parallelum.com.br/fipe/api/v1/carros/marcas"));
+    brandService = BrandService(dio: dio);
+    vehicleService = VehicleService(dio: dio);
+
+    brandProvider = BrandProvider(brandService);
+    vehicleProvider = VehicleProvider(vehicleService);
+
+    brandProvider.getBrand();
+    vehicleProvider.getVehicle();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final modelControler = TextEditingController();
@@ -63,138 +96,188 @@ class _NewCarFormState extends State<NewCarForm> {
           SizedBox(
             height: 32,
             width: 310,
-            child: DropdownButtonFormField(
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                // label: Text("Marca"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              isExpanded: true,
-              hint: const Text(
-                "Marca",
-                // style: TextStyle(fontSize: 14),
-              ),
-              onChanged: (choice) => choice.toString(),
-              onSaved: (brand) => _formData["brand"] = brand ?? "",
-              items: cars.listCarBrand
-                  .map(
-                    (e) => DropdownMenuItem(
-                      child: Text(e),
-                      value: e,
+            child: AnimatedBuilder(
+              animation: brandProvider,
+              builder: (context, child) {
+                if (brandProvider.brands.isEmpty) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  final List<BrandModel> brands = brandProvider.brands;
+                  return DropdownButtonFormField<BrandModel>(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                     ),
-                  )
-                  .toList(),
-              validator: (_brand) {
-                final brand = _brand ?? "";
+                    isExpanded: true,
+                    hint: const Text(
+                      "Marca",
+                      // style: TextStyle(fontSize: 14),
+                    ),
+                    items: brands
+                        .map(
+                          (brand) => DropdownMenuItem(
+                            child: Text(brand.name),
+                            value: brand,
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) =>
+                        brandProvider.setSelectedBrand(value!),
+                    value: brandProvider.selectedBrand,
+                    validator: (_brand) {
+                      final brand = _brand ?? "";
 
-                return null;
+                      return null;
+                    },
+                  );
+                }
               },
             ),
+
+            // child: FutureBuilder<List<BrandModel>>(
+            //   future: brandService.getBrand(),
+            //   builder: (context, snapshot) {
+            //     if (!snapshot.hasData) {
+            //       return Center(
+            //         child: CircularProgressIndicator(),
+            //       );
+            //     } else {
+            //       final List<BrandModel> brands = snapshot.data!;
+            //       return DropdownButtonFormField<BrandModel>(
+            //         decoration: InputDecoration(
+            //           contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            //           border: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(4),
+            //           ),
+            //         ),
+            //         isExpanded: true,
+            //         hint: const Text(
+            //           "Marca",
+            //           // style: TextStyle(fontSize: 14),
+            //         ),
+            //         onChanged: (choice) => selectedBrand = choice,
+            //         value: selectedBrand,
+            //         onSaved: (brand) => _formData["brand"] = brand ?? "",
+            //         items: brands
+            //             .map(
+            //               (brand) => DropdownMenuItem(
+            //                 child: Text(brand.name),
+            //                 value: brand,
+            //               ),
+            //             )
+            //             .toList(),
+            //         validator: (_brand) {
+            //           final brand = _brand ?? "";
+
+            //           return null;
+            //         },
+            //       );
+            //     }
+            //   },
+            // ),
           ),
           SizedBox(height: 16),
           SizedBox(
             height: 32,
             width: 310,
-            child: DropdownButtonFormField(
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                // label: Text("Marca"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              isExpanded: true,
-              hint: const Text(
-                "Modelo",
-                // style: TextStyle(fontSize: 14),
-              ),
-              onChanged: (choice) => choice.toString(),
-              onSaved: (vehicles) => _formData["vehicles"] = vehicles ?? "",
-              items: cars.listCarVehicles
-                  .map(
-                    (e) => DropdownMenuItem(
-                      child: Text(e),
-                      value: e,
+            child: AnimatedBuilder(
+              animation: vehicleProvider,
+              builder: (context, child) {
+                if (vehicleProvider.vehicles.isEmpty) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  final List<VehicleModel> vehicles = vehicleProvider.vehicles;
+                  return DropdownButtonFormField<VehicleModel>(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                     ),
-                  )
-                  .toList(),
-              validator: (_vehicles) {
-                final vehicles = _vehicles ?? "";
-                return null;
+                    isExpanded: true,
+                    hint: const Text(
+                      "Marca",
+                    ),
+                    items: vehicles
+                        .map(
+                          (vehicle) => DropdownMenuItem(
+                            child: Text(vehicle.name),
+                            value: vehicle,
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) =>
+                        vehicleProvider.setSelectedVehicle(value!),
+                    value: vehicleProvider.selectedVehicle,
+                    validator: (_vehicle) {
+                      final vehicle = _vehicle ?? "";
+
+                      return null;
+                    },
+                  );
+                }
               },
             ),
           ),
+          // selectedBrand == null
+          //     ? CircularProgressIndicator()
+          //     : SizedBox(
+          //         height: 32,
+          //         width: 310,
+          //         child: FutureBuilder<List<VehicleModel>>(
+          //             future: vehicleService.getVehicle(selectedBrand!),
+          //             builder: (context, snapshot) {
+          //               if (!snapshot.hasData) {
+          //                 return Center(
+          //                   child: CircularProgressIndicator(),
+          //                 );
+          //               } else {
+          //                 final List<VehicleModel> vehicles = snapshot.data!;
+          //                 return DropdownButtonFormField<VehicleModel>(
+          //                   decoration: InputDecoration(
+          //                     contentPadding:
+          //                         EdgeInsets.symmetric(horizontal: 10),
+          //                     border: OutlineInputBorder(
+          //                       borderRadius: BorderRadius.circular(4),
+          //                     ),
+          //                   ),
+          //                   isExpanded: true,
+          //                   hint: const Text(
+          //                     "Modelo",
+          //                   ),
+          //                   onChanged: (choice) => setState(() {
+          //                     selectedVehicle = choice;
+          //                     print(selectedVehicle?.name);
+          //                   }),
+          //                   value: selectedVehicle,
+          //                   onSaved: (vehicle) =>
+          //                       _formData["vehicle"] = vehicle ?? "",
+          //                   items: vehicles
+          //                       .map(
+          //                         (vehicle) => DropdownMenuItem(
+          //                           child: Text(vehicle.name),
+          //                           value: vehicle,
+          //                         ),
+          //                       )
+          //                       .toList(),
+          //                   validator: (_vehicle) {
+          //                     final vehicle = _vehicle ?? "";
+
+          //                     return null;
+          //                   },
+          //                 );
+          //               }
+          //             }),
+          //       ),
+          Text("inserir Ano"),
           SizedBox(height: 16),
-          SizedBox(
-            height: 32,
-            width: 310,
-            child: DropdownButtonFormField(
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              isExpanded: true,
-              hint: const Text(
-                "Ano",
-              ),
-              onChanged: (choice) => choice.toString(),
-              onSaved: (year) => _formData["year"] = year ?? "",
-              items: cars.listCarYear
-                  .map(
-                    (e) => DropdownMenuItem(
-                      child: Text(e),
-                      value: e,
-                    ),
-                  )
-                  .toList(),
-              validator: (_year) {
-                final year = _year ?? "";
-                return null;
-              },
-            ),
-          ),
-          SizedBox(height: 16),
-          SizedBox(
-            // Mudar para container
-            height: 32,
-            width: 310,
-            child: DropdownButtonFormField(
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                // label: Text("Marca"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              isExpanded: true,
-              hint: const Text(
-                "Valor (R\$)",
-                // style: TextStyle(fontSize: 14),
-              ),
-              onChanged: (choice) => choice.toString(),
-              onSaved: (price) => _formData["price"] = price ?? "",
-              items: [
-                "10",
-                "20",
-                "30",
-              ]
-                  .map(
-                    (e) => DropdownMenuItem(
-                      child: Text(e),
-                      value: e,
-                    ),
-                  )
-                  .toList(),
-              validator: (_price) {
-                final price = _price ?? "";
-                return null;
-              },
-            ),
-          ),
+          Text("Inserir Valor"),
         ],
       ),
     );
