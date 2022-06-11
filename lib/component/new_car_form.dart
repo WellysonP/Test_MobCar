@@ -30,16 +30,14 @@ class _NewCarFormState extends State<NewCarForm> {
 
   @override
   void initState() {
-    dio = Dio(BaseOptions(
-        baseUrl: "https://parallelum.com.br/fipe/api/v1/carros/marcas"));
+    dio = Dio(BaseOptions(baseUrl: ""));
     brandService = BrandService(dio: dio);
     vehicleService = VehicleService(dio: dio);
 
     brandProvider = BrandProvider(brandService);
-    vehicleProvider = VehicleProvider(vehicleService);
+    vehicleProvider = VehicleProvider(vehicleService, brandProvider);
 
     brandProvider.getBrand();
-    vehicleProvider.getVehicle();
 
     super.initState();
   }
@@ -90,7 +88,6 @@ class _NewCarFormState extends State<NewCarForm> {
     }
 
     return Form(
-      key: _formkey,
       child: Column(
         children: [
           SizedBox(
@@ -106,6 +103,7 @@ class _NewCarFormState extends State<NewCarForm> {
                 } else {
                   final List<BrandModel> brands = brandProvider.brands;
                   return DropdownButtonFormField<BrandModel>(
+                    key: _formkey,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       border: OutlineInputBorder(
@@ -125,8 +123,17 @@ class _NewCarFormState extends State<NewCarForm> {
                           ),
                         )
                         .toList(),
-                    onChanged: (value) =>
-                        brandProvider.setSelectedBrand(value!),
+                    onChanged: (value) async {
+                      brandProvider.setSelectedBrand(value!);
+                      // vehicleProvider.getVehicle();
+                      print(
+                          " via brandProvider ${brandProvider.selectedBrand!.id}");
+                      // print(brandProvider.brands);
+                      await vehicleProvider.getVehicle();
+
+                      print(
+                          "retorno vehicleProvider ${vehicleProvider.vehicles}");
+                    },
                     value: brandProvider.selectedBrand,
                     validator: (_brand) {
                       final brand = _brand ?? "";
@@ -181,57 +188,62 @@ class _NewCarFormState extends State<NewCarForm> {
             // ),
           ),
           SizedBox(height: 16),
-          SizedBox(
-            height: 32,
-            width: 310,
-            child: AnimatedBuilder(
-              animation: vehicleProvider,
-              builder: (context, child) {
-                if (vehicleProvider.vehicles.isEmpty) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  final List<VehicleModel> vehicles = vehicleProvider.vehicles;
-                  return DropdownButtonFormField<VehicleModel>(
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    isExpanded: true,
-                    hint: const Text(
-                      "Marca",
-                    ),
-                    items: vehicles
-                        .map(
-                          (vehicle) => DropdownMenuItem(
-                            child: Text(vehicle.name),
-                            value: vehicle,
+          brandProvider.selectedBrand?.id == null
+              ? CircularProgressIndicator()
+              : SizedBox(
+                  height: 32,
+                  width: 310,
+                  child: AnimatedBuilder(
+                    animation: vehicleProvider,
+                    builder: (context, child) {
+                      if (vehicleProvider.vehicles.isEmpty) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        final List<VehicleModel> vehicles =
+                            vehicleProvider.vehicles;
+                        return DropdownButtonFormField<VehicleModel>(
+                          decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                           ),
-                        )
-                        .toList(),
-                    onChanged: (value) =>
-                        vehicleProvider.setSelectedVehicle(value!),
-                    value: vehicleProvider.selectedVehicle,
-                    validator: (_vehicle) {
-                      final vehicle = _vehicle ?? "";
+                          isExpanded: true,
+                          hint: const Text(
+                            "Marca",
+                          ),
+                          items: vehicles
+                              .map(
+                                (vehicle) => DropdownMenuItem(
+                                  child: Text(vehicle.name),
+                                  value: vehicle,
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) =>
+                              vehicleProvider.setSelectedVehicle(value!),
+                          value: vehicleProvider.selectedVehicle,
+                          validator: (_vehicle) {
+                            final vehicle = _vehicle ?? "";
 
-                      return null;
+                            return null;
+                          },
+                        );
+                      }
                     },
-                  );
-                }
-              },
-            ),
-          ),
-          // selectedBrand == null
+                  ),
+                ),
+          // brandProvider.selectedBrand?.id == null
           //     ? CircularProgressIndicator()
           //     : SizedBox(
           //         height: 32,
           //         width: 310,
           //         child: FutureBuilder<List<VehicleModel>>(
-          //             future: vehicleService.getVehicle(selectedBrand!),
+          //             future: vehicleService
+          //                 .getVehicle(brandProvider.selectedBrand!),
           //             builder: (context, snapshot) {
           //               if (!snapshot.hasData) {
           //                 return Center(
@@ -253,7 +265,7 @@ class _NewCarFormState extends State<NewCarForm> {
           //                   ),
           //                   onChanged: (choice) => setState(() {
           //                     selectedVehicle = choice;
-          //                     print(selectedVehicle?.name);
+          //                     // print(selectedVehicle?.name);
           //                   }),
           //                   value: selectedVehicle,
           //                   onSaved: (vehicle) =>

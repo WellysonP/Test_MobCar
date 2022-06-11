@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:mobicar/models/brand_model.dart';
-
 import '../models/vehicle_model.dart';
 
 class VehicleService {
@@ -8,18 +7,15 @@ class VehicleService {
 
   VehicleService({required this.dio});
 
-  Future<List<VehicleModel>> getVehicle(BrandModel brand) async {
-    final String brandInitial = brand.id;
-    // listCarBrand.clear();
+  Future<List<VehicleModel>> getVehicle(BrandModel selectedBrand) async {
+    final String brandInitial = selectedBrand.id;
+    print("via VehicleService $brandInitial");
+
     Response response = await dio.get(
         "https://parallelum.com.br/fipe/api/v1/carros/marcas/$brandInitial/modelos");
-    // for (int i = 0; i < response.data.length; i++) {
-    //   List itemCarBrand = [response.data[i]["nome"]];
-    //   listCarBrand += itemCarBrand;
-    // }
-    final vehicles = response.data as List;
+    final vehicles = response.data["modelos"] as List;
     final List<VehicleModel> vehicleList =
-        vehicles.map((brand) => VehicleModel.fromJson(brand)).toList();
+        vehicles.map((vehicle) => VehicleModel.fromJson(vehicle)).toList();
     return vehicleList;
   }
 }
