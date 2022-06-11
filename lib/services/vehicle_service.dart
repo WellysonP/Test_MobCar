@@ -9,7 +9,6 @@ class VehicleService {
 
   Future<List<VehicleModel>> getVehicle(BrandModel selectedBrand) async {
     final String brandInitial = selectedBrand.id;
-    print("via VehicleService $brandInitial");
 
     Response response = await dio.get(
         "https://parallelum.com.br/fipe/api/v1/carros/marcas/$brandInitial/modelos");

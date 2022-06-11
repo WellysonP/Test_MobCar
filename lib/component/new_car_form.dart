@@ -9,6 +9,9 @@ import 'package:provider/provider.dart';
 
 import '../Provider/cars.dart';
 import '../Provider/vehicle_provider.dart';
+import '../Provider/year_provider.dart';
+import '../models/year_model.dart';
+import '../services/year_service.dart';
 
 class NewCarForm extends StatefulWidget {
   const NewCarForm({Key? key}) : super(key: key);
@@ -21,21 +24,26 @@ class _NewCarFormState extends State<NewCarForm> {
   late final Dio dio;
   late final BrandService brandService;
   late final VehicleService vehicleService;
+  late final YearService yearService;
 
   late final BrandProvider brandProvider;
   late final VehicleProvider vehicleProvider;
+  late final YearProvider yearProvider;
 
   BrandModel? selectedBrand;
   VehicleModel? selectedVehicle;
+  YearModel? selectedYear;
 
   @override
   void initState() {
     dio = Dio(BaseOptions(baseUrl: ""));
     brandService = BrandService(dio: dio);
     vehicleService = VehicleService(dio: dio);
+    yearService = YearService(dio: dio);
 
     brandProvider = BrandProvider(brandService);
     vehicleProvider = VehicleProvider(vehicleService, brandProvider);
+    yearProvider = YearProvider(yearService, brandProvider, vehicleProvider);
 
     brandProvider.getBrand();
     // vehicleProvider.getVehicle();
@@ -183,8 +191,15 @@ class _NewCarFormState extends State<NewCarForm> {
                                 ),
                               )
                               .toList(),
-                          onChanged: (value) =>
-                              vehicleProvider.setSelectedVehicle(value!),
+                          onChanged: (value) async {
+                            vehicleProvider.setSelectedVehicle(value!);
+
+                            setState(() {});
+                            // modificar posteriormente paras sair do setState e ficar apenas com provider
+
+                            await yearProvider.getYear();
+                            vehicleProvider.setSelectedVehicle(value);
+                          },
                           value: vehicleProvider.selectedVehicle,
                           validator: (_vehicle) {
                             final vehicle = _vehicle ?? "";
@@ -196,7 +211,57 @@ class _NewCarFormState extends State<NewCarForm> {
                     },
                   ),
                 ),
-          Text("inserir Ano"),
+          SizedBox(height: 16),
+          vehicleProvider.selectedVehicle?.id == null
+              ? SizedBox(
+                  height: 32,
+                  width: 310,
+                )
+              : SizedBox(
+                  height: 32,
+                  width: 310,
+                  child: AnimatedBuilder(
+                    animation: yearProvider,
+                    builder: (context, child) {
+                      if (yearProvider.years.isEmpty) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        final List<YearModel> years = yearProvider.years;
+                        return DropdownButtonFormField<YearModel>(
+                          decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          isExpanded: true,
+                          hint: const Text(
+                            "Ano",
+                          ),
+                          items: years
+                              .map(
+                                (year) => DropdownMenuItem(
+                                  child: Text(year.name),
+                                  value: year,
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) =>
+                              yearProvider.setSelectedYear(value!),
+                          value: yearProvider.selectedYear,
+                          validator: (_vehicle) {
+                            final vehicle = _vehicle ?? "";
+
+                            return null;
+                          },
+                        );
+                      }
+                    },
+                  ),
+                ),
           SizedBox(height: 16),
           Text("Inserir Valor"),
         ],
