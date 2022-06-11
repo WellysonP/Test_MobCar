@@ -67,40 +67,9 @@ class Cars with ChangeNotifier {
     }
   }
 
-  // Future<List<BrandModel>> getBrand() async {
-  //   // listCarBrand.clear();
-  //   Response response =
-  //       await dio.get("https://parallelum.com.br/fipe/api/v1/carros/marcas");
-  //   // for (int i = 0; i < response.data.length; i++) {
-  //   //   List itemCarBrand = [response.data[i]["nome"]];
-  //   //   listCarBrand += itemCarBrand;
-  //   // }
-  //   final brands = response.data as List;
-  //   final List<BrandModel> brandList =
-  //       brands.map((brand) => BrandModel.fromJson(brand)).toList();
-  //   print(brandList);
-  //   return brandList;
+  // Future<void> getBrand() async {
+  //   brands = await _service.getBrand();
+  //   notifyListeners();
   // }
 
-  // Future<void> getVehicle() async {
-  //   listCarVehicles.clear();
-  //   Response response = await dio
-  //       .get("https://parallelum.com.br/fipe/api/v1/carros/marcas/10/modelos");
-  //   for (int i = 0; i < response.data.length; i++) {
-  //     List itemCarVehicle = [response.data["modelos"][i]["nome"]];
-  //     listCarVehicles += itemCarVehicle;
-  //   }
-  //   // print(listCarVehicles);
-  // }
-
-  // Future<void> getyear() async {
-  //   listCarYear.clear();
-  //   Response response = await dio
-  //       .get("https://parallelum.com.br/fipe/api/v1/carros/marcas/10/modelos");
-  //   for (int i = 0; i < response.data.length; i++) {
-  //     List itemCarYear = [response.data["anos"][i]["nome"]];
-  //     listCarYear += itemCarYear;
-  //   }
-  //   // print(_items);
-  // }
 }

@@ -14,8 +14,8 @@ class VehicleProvider extends ChangeNotifier {
   VehicleModel? selectedVehicle;
 
   Future<void> getVehicle() async {
-    BrandModel selected = brandProvider.selectedBrand!;
-    vehicles = await _service.getVehicle(selected);
+    BrandModel? selected = brandProvider.selectedBrand;
+    vehicles = await _service.getVehicle(selected!);
     notifyListeners();
   }
 

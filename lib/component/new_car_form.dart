@@ -38,6 +38,7 @@ class _NewCarFormState extends State<NewCarForm> {
     vehicleProvider = VehicleProvider(vehicleService, brandProvider);
 
     brandProvider.getBrand();
+    // vehicleProvider.getVehicle();
 
     super.initState();
   }
@@ -125,14 +126,12 @@ class _NewCarFormState extends State<NewCarForm> {
                         .toList(),
                     onChanged: (value) async {
                       brandProvider.setSelectedBrand(value!);
-                      // vehicleProvider.getVehicle();
-                      print(
-                          " via brandProvider ${brandProvider.selectedBrand!.id}");
-                      // print(brandProvider.brands);
-                      await vehicleProvider.getVehicle();
 
-                      print(
-                          "retorno vehicleProvider ${vehicleProvider.vehicles}");
+                      setState(() {});
+                      // modificar posteriormente paras sair do setState e ficar apenas com provider
+
+                      await vehicleProvider.getVehicle();
+                      brandProvider.setSelectedBrand(value);
                     },
                     value: brandProvider.selectedBrand,
                     validator: (_brand) {
@@ -144,52 +143,13 @@ class _NewCarFormState extends State<NewCarForm> {
                 }
               },
             ),
-
-            // child: FutureBuilder<List<BrandModel>>(
-            //   future: brandService.getBrand(),
-            //   builder: (context, snapshot) {
-            //     if (!snapshot.hasData) {
-            //       return Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     } else {
-            //       final List<BrandModel> brands = snapshot.data!;
-            //       return DropdownButtonFormField<BrandModel>(
-            //         decoration: InputDecoration(
-            //           contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            //           border: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(4),
-            //           ),
-            //         ),
-            //         isExpanded: true,
-            //         hint: const Text(
-            //           "Marca",
-            //           // style: TextStyle(fontSize: 14),
-            //         ),
-            //         onChanged: (choice) => selectedBrand = choice,
-            //         value: selectedBrand,
-            //         onSaved: (brand) => _formData["brand"] = brand ?? "",
-            //         items: brands
-            //             .map(
-            //               (brand) => DropdownMenuItem(
-            //                 child: Text(brand.name),
-            //                 value: brand,
-            //               ),
-            //             )
-            //             .toList(),
-            //         validator: (_brand) {
-            //           final brand = _brand ?? "";
-
-            //           return null;
-            //         },
-            //       );
-            //     }
-            //   },
-            // ),
           ),
           SizedBox(height: 16),
           brandProvider.selectedBrand?.id == null
-              ? CircularProgressIndicator()
+              ? SizedBox(
+                  height: 32,
+                  width: 310,
+                )
               : SizedBox(
                   height: 32,
                   width: 310,
@@ -236,57 +196,6 @@ class _NewCarFormState extends State<NewCarForm> {
                     },
                   ),
                 ),
-          // brandProvider.selectedBrand?.id == null
-          //     ? CircularProgressIndicator()
-          //     : SizedBox(
-          //         height: 32,
-          //         width: 310,
-          //         child: FutureBuilder<List<VehicleModel>>(
-          //             future: vehicleService
-          //                 .getVehicle(brandProvider.selectedBrand!),
-          //             builder: (context, snapshot) {
-          //               if (!snapshot.hasData) {
-          //                 return Center(
-          //                   child: CircularProgressIndicator(),
-          //                 );
-          //               } else {
-          //                 final List<VehicleModel> vehicles = snapshot.data!;
-          //                 return DropdownButtonFormField<VehicleModel>(
-          //                   decoration: InputDecoration(
-          //                     contentPadding:
-          //                         EdgeInsets.symmetric(horizontal: 10),
-          //                     border: OutlineInputBorder(
-          //                       borderRadius: BorderRadius.circular(4),
-          //                     ),
-          //                   ),
-          //                   isExpanded: true,
-          //                   hint: const Text(
-          //                     "Modelo",
-          //                   ),
-          //                   onChanged: (choice) => setState(() {
-          //                     selectedVehicle = choice;
-          //                     // print(selectedVehicle?.name);
-          //                   }),
-          //                   value: selectedVehicle,
-          //                   onSaved: (vehicle) =>
-          //                       _formData["vehicle"] = vehicle ?? "",
-          //                   items: vehicles
-          //                       .map(
-          //                         (vehicle) => DropdownMenuItem(
-          //                           child: Text(vehicle.name),
-          //                           value: vehicle,
-          //                         ),
-          //                       )
-          //                       .toList(),
-          //                   validator: (_vehicle) {
-          //                     final vehicle = _vehicle ?? "";
-
-          //                     return null;
-          //                   },
-          //                 );
-          //               }
-          //             }),
-          //       ),
           Text("inserir Ano"),
           SizedBox(height: 16),
           Text("Inserir Valor"),
