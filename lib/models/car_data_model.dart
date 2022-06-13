@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class CarDataModel {
   CarDataModel({
     required this.price,
@@ -28,4 +29,29 @@ class CarDataModel {
   final String fuelType;
   final String fipeCode;
   final String monthRef;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CarDataModel &&
+        other.price == price &&
+        other.brand == brand &&
+        other.model == model &&
+        other.year == year &&
+        other.fuelType == fuelType &&
+        other.fipeCode == fipeCode &&
+        other.monthRef == monthRef;
+  }
+
+  @override
+  int get hashCode {
+    return price.hashCode ^
+        brand.hashCode ^
+        model.hashCode ^
+        year.hashCode ^
+        fuelType.hashCode ^
+        fipeCode.hashCode ^
+        monthRef.hashCode;
+  }
 }

@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Cars(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => NewCarForm(),
+        ),
       ],
       child: MaterialApp(
         theme: theme.copyWith(

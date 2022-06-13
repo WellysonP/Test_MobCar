@@ -11,6 +11,8 @@ class NewCarDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cars = Provider.of<Cars>(context);
+    final newcar = Provider.of<NewCarForm>(context);
+
     return TextButton(
       style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -113,7 +115,9 @@ class NewCarDialog extends StatelessWidget {
                             minimumSize: Size(50, 30),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             alignment: Alignment.centerLeft),
-                        onPressed: () {},
+                        onPressed: () {
+                          newcar.submit();
+                        },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Container(

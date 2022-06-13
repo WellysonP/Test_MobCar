@@ -66,10 +66,4 @@ class Cars with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // Future<void> getBrand() async {
-  //   brands = await _service.getBrand();
-  //   notifyListeners();
-  // }
-
 }
