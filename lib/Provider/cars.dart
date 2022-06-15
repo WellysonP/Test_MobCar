@@ -47,7 +47,6 @@ class Cars with ChangeNotifier {
       vehicles: data["vehicles"] as String,
       year: data["year"] as String,
       price: data["price"] as String,
-      // imageUrl: data["imageUrla"] as String,
     );
 
     if (hasId) {

@@ -72,13 +72,12 @@ class NewCarDialog extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: SizedBox(
-                      width: 310,
-                      height: 120,
-                      child: Image.asset(
-                        "assets/images/Home mobile.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                        width: 310,
+                        height: 120,
+                        child: Image.network(
+                          "https://portallubes.com.br/wp-content/uploads/2019/01/corolla_xei_2019.jpg",
+                          fit: BoxFit.cover,
+                        )),
                   ),
                   SizedBox(height: 16),
                   NewCarForm(),
@@ -92,7 +91,9 @@ class NewCarDialog extends StatelessWidget {
                             minimumSize: Size(50, 30),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             alignment: Alignment.centerLeft),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -116,7 +117,7 @@ class NewCarDialog extends StatelessWidget {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             alignment: Alignment.centerLeft),
                         onPressed: () {
-                          newcar.submit();
+                          newcar.submit(context);
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
